@@ -3,25 +3,11 @@
 # (".user-message" / ".ai-message") and using CSS flexbox to align them differently.
 # In addition, we tweak the text alignment accordingly.
 
+from uuid import uuid4
 import streamlit as st
 
 # We'll store messages in st.session_state for dynamic updates.
 # We define separate functions for user messages and AI messages.
-
-
-def top_bar():
-    """Renders the top bar at the top of the app."""
-    st.markdown(
-        """
-        <div class="top-bar">
-            <div class="top-bar-left">
-                <span class="ai-icon">★</span>AI Companion
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
 
 def render_user_message(text, timestamp=""):
     """Render a user message bubble on the chat UI, right-aligned."""
@@ -63,6 +49,7 @@ def render_ai_message(text, timestamp=""):
         """,
         unsafe_allow_html=True
     )
+    st.button("click me", key=uuid4())
 
 
 def collapsible_prompts_section():
@@ -115,6 +102,7 @@ def app_layout():
     [data-testid="stToolbar"], footer, header {
         visibility: hidden;
         height: 0;
+        max-height: 0;
         position: absolute;
     }
 
@@ -123,37 +111,13 @@ def app_layout():
         flex-direction: column;
         align-items: stretch;
     }
+    
+    h1 {
+        text-align: center;
+    }
 
-    /* TOP BAR */
-    .top-bar {
-        position: sticky; /* pin to top */
-        top: 0;
-        z-index: 999; /* ensure it stays above other elements */
-        margin-top: 0.5rem; /* slight top margin */
-
-        flex-shrink: 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #f8f9fa;
-        border-bottom: 1px solid #ddd;
-        padding: 0.75rem 1rem;
-        font-size: 16px;
-        color: #333;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-    .top-bar-left {
-        display: flex;
-        align-items: center;
-        font-weight: 600;
-    }
-    .top-bar-left .ai-icon {
-        margin-right: 0.5rem;
-        font-weight: bold;
-    }
-    .top-bar-right {
-        color: #888;
-        cursor: pointer;
+    section.stMain .block-container {
+        padding-top: 0rem;
     }
 
     /* SCROLLABLE MESSAGES AREA */
@@ -213,7 +177,7 @@ def app_layout():
     /* USER message: right-aligned */
     .user-message {
         align-items: flex-end;
-        text-align: right;
+        text-align: left;
     }
     .user-bubble {
         background-color: #f4f4f8;
@@ -299,18 +263,6 @@ def app_layout():
         min-height: 40px !important;
         max-height: 80px !important;
     }
-    [data-testid="stChatInputContainer"] button {
-        background-color: #4b9fee !important;
-        color: #fff !important;
-        border: none !important;
-        border-radius: 4px !important;
-        padding: 0.5rem 1rem !important;
-        font-size: 14px !important;
-        cursor: pointer !important;
-    }
-    [data-testid="stChatInputContainer"] button:hover {
-        background-color: #3287db !important;
-    }
 
     /* SCROLLBAR STYLING (optional) */
     ::-webkit-scrollbar {
@@ -327,8 +279,7 @@ def app_layout():
 
     st.markdown(custom_css, unsafe_allow_html=True)
 
-    # Render top bar
-    top_bar()
+    st.title("AI Companion")
 
     # Create chat area
     st.markdown('<div class="chat-area"><div class="chat-container">', unsafe_allow_html=True)
